@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>School Detective</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#dff3ff;--card:#fff;--ink:#3b2f6b;--pk:#ff8fb8;--yl:#ffd75e;--gr:#7fdc9a;--pu:#a98bff;--bl:#7ec8ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#dff3ff}}
+:root[data-theme=dark]{--bg:#dff3ff}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(#dff3ff,#fff4d6);color:var(--ink);font-family:"Baloo 2","Comic Sans MS","Trebuchet MS",system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#app{max-width:1100px;margin:0 auto;padding:10px;min-height:100%}
+header{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:22px;padding:8px 14px;box-shadow:0 4px 0 #cfe3f5;font-size:1.3rem;font-weight:700}
+.bar{flex:1;min-width:120px;height:18px;background:#e6e0ff;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--gr);transition:width .5s}
+button{font:inherit;cursor:pointer;border:0;border-radius:18px;padding:8px 16px;background:var(--yl);color:var(--ink);font-weight:700;box-shadow:0 4px 0 #d9a92a;transition:transform .1s}
+button:active{transform:translateY(3px);box-shadow:none}button:disabled{opacity:.45;cursor:default}
+main{text-align:center;padding:10px}
+h1{font-size:clamp(2.2rem,7vw,4.5rem);margin:.2em 0;text-shadow:3px 3px 0 var(--yl)}h2{font-size:clamp(1.6rem,4.5vw,2.6rem);margin:.4em 0}
+.big{font-size:clamp(1.5rem,4vw,2.4rem);padding:14px 36px;background:var(--pk);box-shadow:0 6px 0 #d4568a;color:#fff}
+.ch{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.ch button{font-size:clamp(1.5rem,4vw,2.4rem);padding:14px 30px;background:var(--bl);box-shadow:0 6px 0 #4a9fd6;min-width:170px}
+.ch button.bad{background:#ccc;box-shadow:none;animation:shake .4s}
+.ch button.good{background:var(--gr);box-shadow:0 6px 0 #3fa863;animation:pop .5s}
+.cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.card{background:var(--card);border-radius:24px;padding:12px 18px;min-width:120px;box-shadow:0 5px 0 #d6cdf5;font-size:1.3rem;font-weight:700}
+.card span{display:block;font-size:clamp(3rem,8vw,5rem)}.card.q{border:4px dashed var(--pu);background:#f3eeff}
+.say{background:#fff7d6;border:4px dashed var(--yl);border-radius:22px;padding:12px;margin:12px auto;max-width:700px;font-size:1.6rem}
+.say b{font-size:2rem;color:#d4568a}
+.snd{background:var(--pu);color:#fff;box-shadow:0 4px 0 #7a5ad6;padding:4px 12px}
+#fb{font-size:2rem;font-weight:800;min-height:2.6rem}
+.pair{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.room{position:relative;width:min(46vw,430px);height:min(34vw,300px);min-width:260px;min-height:200px;background:#fff9e8;border:6px solid var(--yl);border-radius:22px;background-image:linear-gradient(#fff9e8 62%,#e9d6b0 62%)}
+.slot{position:absolute;transform:translate(-50%,-50%);width:23%;height:30%;display:flex;align-items:center;justify-content:center;font-size:clamp(1.8rem,5vw,3.4rem);cursor:pointer;border-radius:50%}
+.slot.found{outline:5px solid var(--gr);background:#d5f8e0}.slot.wig{animation:shake .4s}
+.lab{font-size:1.4rem;font-weight:800}
+.box{display:inline-block;font-size:clamp(6rem,18vw,11rem);cursor:pointer;animation:bob 1.2s infinite}.box.open{animation:shake .6s}
+.sil{font-size:clamp(5rem,15vw,9rem);filter:brightness(0);transition:filter .6s}.sil.rev{filter:none;animation:spin .8s}
+.scene4{display:flex;justify-content:center;gap:clamp(10px,4vw,50px);background:#fff9e8;border:6px solid var(--yl);border-radius:22px;padding:14px;align-items:flex-end}
+.z{display:flex;flex-direction:column;align-items:center;position:relative;min-height:190px;justify-content:flex-end;font-weight:800;font-size:1.2rem}
+.fur{font-size:clamp(4rem,11vw,7rem)}.it{font-size:clamp(2.2rem,6vw,3.5rem)}.in{position:absolute;bottom:34%;font-size:clamp(1.6rem,4vw,2.4rem)}
+.kids{display:flex;justify-content:center;gap:clamp(14px,6vw,70px);margin:20px 0}
+.kid{position:relative;font-size:1.6rem;font-weight:800}.face{position:relative;z-index:1;display:block;font-size:clamp(4.5rem,12vw,7rem);background:#ffe9f1;border-radius:50%;width:1.35em;height:1.35em;line-height:1.35em;margin:auto}
+.kid:nth-child(2) .face{background:#e0f1ff}.kid:nth-child(3) .face{background:#e6f9e6}
+.pk{position:absolute;right:-14px;bottom:34px;font-size:2.6rem;z-index:0}
+.home{background:#fff;border-radius:30px;padding:24px;margin-top:14px;box-shadow:0 8px 0 #cfe3f5}
+.deco{font-size:clamp(2rem,6vw,3.6rem);letter-spacing:.3em}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}
+.map button{font-size:1.5rem;padding:20px;background:var(--gr);box-shadow:0 6px 0 #3fa863}.map button:disabled{background:#ddd;box-shadow:none}
+.modal{position:fixed;inset:0;background:#0007;z-index:50;display:flex;align-items:center;justify-content:center;padding:14px}
+.mbox{background:#fff;border-radius:24px;max-width:900px;max-height:90%;overflow:auto;padding:20px;text-align:left;font-size:1.1rem}
+.mbox h3{margin:.8em 0 .2em;color:#d4568a}.mbox p{margin:.15em 0}
+.banner{background:#ffe3e3;border-radius:18px;padding:8px;font-size:1.5rem;font-weight:800;margin:8px 0}
+.c{position:fixed;top:-20px;width:12px;height:16px;z-index:99;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes pop{50%{transform:scale(1.2)}}@keyframes bob{50%{transform:translateY(-14px)}}@keyframes spin{from{transform:rotate(-360deg) scale(.3)}}
+</style></head><body><div id="app"></div>
+<script>
+const SH='<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.12em"><path d="M3 8l14-3 4 6-2 9H5z" fill="#ffb347" stroke="#b36b00" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9.5" cy="13" r="2.6" fill="#fff" stroke="#b36b00"/></svg>';
+const E={pen:'🖊️',pencil:'✏️',crayon:'🖍️',eraser:'🧽',ruler:'📏',sharpener:SH,backpack:'🎒',book:'📕',notebook:'📓'},V=Object.keys(E);
+const $=s=>document.querySelector(s),sh=a=>[...a].sort(()=>Math.random()-.5),pick=(a,n)=>sh(a).slice(0,n);
+const art=w=>(/^[aeiou]/.test(w)?'an ':'a ')+w,em=w=>E[w],app=$('#app');
+const LV=['🔍 What\'s missing?','🕵️ Spot the Difference','🎁 Mystery Box','🏫 Where is it?','👀 Who took it?','🚨 Catch the Thief!'];
+let G,AC;
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.8;u.pitch=1.2;speechSynthesis.speak(u)}catch(e){}}
+function sfx(ok){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();(ok?[660,880,1100]:[220,160]).forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;o.type='triangle';o.connect(g);g.connect(AC.destination);const t=AC.currentTime+i*.12;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.start(t);o.stop(t+.3)})}catch(e){}}
+function conf(n=40){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='c';s.style.cssText=`left:${Math.random()*100}vw;background:hsl(${Math.random()*360},90%,60%);animation-duration:${1.8+Math.random()*1.8}s`;document.body.appendChild(s);setTimeout(()=>s.remove(),4000)}}
+document.addEventListener('click',e=>{const s=e.target.dataset&&e.target.dataset.s;if(s)say(s)});
+function init(){G={stars:0,lives:3,done:0,tok:null}}
+function hud(pct,lab){return`<header><button onclick="home()">🏠 Home</button><span id="st">⭐ ${G.stars}</span><span id="lv">${'❤️'.repeat(G.lives)}${'🖤'.repeat(3-G.lives)}</span><div class="bar"><i style="width:${pct||0}%"></i></div><span>${lab||''}</span><button onclick="restart()">🔄 Restart</button><button onclick="teach()">👩‍🏫 Teacher Mode</button></header>`}
+function page(inner,pct,lab){G.tok=null;speechSynthesis&&speechSynthesis.cancel();app.innerHTML=hud(pct,lab)+`<main>${inner}</main>`}
+function upd(){$('#st').textContent='⭐ '+G.stars;$('#lv').textContent='❤️'.repeat(G.lives)+'🖤'.repeat(3-G.lives)}
+function restart(){init();map()}
+function home(){init();app.innerHTML=`<main><div class="home"><div class="deco">🏫📚✏️🎒</div><h1>🕵️ SCHOOL DETECTIVE</h1><h2>“Can you find all the missing school things?”</h2><div class="deco">🧒🔍🪑🗃️📏</div><p><button class="big" onclick="say('Can you find all the missing school things?');map()">▶️ START MISSION</button></p><p style="font-size:1.6rem;font-weight:800">⭐ 0 Stars &nbsp; ❤️❤️❤️</p><button onclick="teach()">👩‍🏫 Teacher Mode</button></div></main>`}
+function map(){page(`<h2>🗺️ Choose your mission!</h2><div class="map">${LV.map((n,i)=>`<button ${i>G.done?'disabled':''} onclick="start(${i+1})">${i>G.done?'🔒':i<G.done?'✅':'▶️'} Level ${i<5?i+1:'FINAL'}<br>${n}</button>`).join('')}</div>`,G.done/6*100,G.done+'/6')}
+function over(){page(`<h1>😢 Oh no!</h1><h2>The thief got away... Try again!</h2><button class="big" onclick="G.lives=3;map()">🔄 Try again</button>`)}
+function finish(id){if(id>G.done)G.done=id;conf(120);sfx(1);if(id<6){say('Amazing!');page(`<h1>🎉 LEVEL COMPLETE!</h1><h2>Amazing! ⭐ ${G.stars}</h2><button class="big" onclick="map()">Next mission ➡️</button>`,id/6*100,id+'/6')}else{say('Case closed!');page(`<h1>🎉 CASE CLOSED!</h1><h2>YOU SAVED THE SCHOOL!</h2><div style="font-size:5rem">🏆</div><h2>🕵️ SCHOOL DETECTIVE HERO</h2><div style="font-size:3rem">⭐ ⭐ ⭐ ⭐ ⭐</div><h2>Score: ${G.stars} ⭐</h2><button class="big" data-s="Case closed!">🔊</button> <button class="big" onclick="restart()">🔄 Play again</button>`,100,'6/6')}}
+function run(id,N,fn){let i=0;(function step(){if(i>=N)return finish(id);page('<div id="stage"></div><div id="qbox"></div>',i/N*100,(i+1)+'/'+N);fn(i,()=>{i++;step()})})()}
+function start(n){G.lives=Math.max(G.lives,1);[0,()=>run(1,4,L1),()=>run(2,1,L2),()=>run(3,3,L3),()=>run(4,4,L4),()=>run(5,3,L5),()=>run(6,3,(i,nx)=>{[L1,L2,L5][i](0,nx);$('#stage').insertAdjacentHTML('beforebegin',`<div class="banner">🚨 OH NO! The school things are missing!<br>Task ${i+1}/3: ${['Find what\'s missing','Find the difference','Find the thief'][i]}</div>`)})][n]()}
+// generic question
+function Q(o,next){const q=$('#qbox');q.innerHTML=`<h2>${o.q} <button class="snd" data-s="${o.q}">🔊</button></h2><div class="ch"></div><div id="fb"></div><div id="sp"></div>`;say(o.q);const ch=q.querySelector('.ch');
+sh(o.ch).forEach(c=>{const b=document.createElement('button');b.textContent=c;ch.appendChild(b);b.onclick=()=>{if(c===o.a){ch.querySelectorAll('button').forEach(x=>x.disabled=true);b.classList.add('good');G.stars++;upd();sfx(1);conf(30);const p=pick(['Correct!','Amazing!','Great!'],1)[0];$('#fb').textContent='🎉 '+p.toUpperCase();setTimeout(()=>say(p),150);o.rev&&o.rev();
+$('#sp').innerHTML=`<div class="say">🗣️ Say it: <b>${o.s}</b> <button class="snd" data-s="${o.s}">🔊</button> <button id="said">🎤 I said it!</button></div>`;setTimeout(()=>say(o.s),1000);
+$('#said').onclick=()=>{$('#sp').innerHTML+=`<button class="big" id="nx">Next ➡️</button>`;$('#said').disabled=true;$('#nx').onclick=next}}else{b.disabled=true;b.classList.add('bad');G.lives--;upd();sfx(0);$('#fb').textContent='Try again! 👀';say('Try again!');if(G.lives<=0)setTimeout(over,900)}}})}
+function distract(a,n=2){return[a,...pick(V.filter(w=>w!==a),n)]}
+// LEVEL 1
+function L1(i,next){const it=pick(V,5),m=pick(it,1)[0],tok=G.tok={};const S=$('#stage');
+const cards=h=>it.map(w=>w===m&&h?`<div class="card q"><span>❓</span>?</div>`:`<div class="card"><span>${em(w)}</span>${w}</div>`).join('');
+const t=(f,ms)=>setTimeout(()=>G.tok===tok&&f(),ms);let c=5;S.innerHTML=`<h2 id="hd">LOOK CAREFULLY! 👀 ${c}</h2><div class="cards" id="cd">${cards(0)}</div>`;
+const tick=()=>{c--;if(c>0){$('#hd').textContent='LOOK CAREFULLY! 👀 '+c;t(tick,1000)}else{let k=3;const cd=()=>{$('#hd').textContent=k+'...';sfx(1);if(--k>=0)t(cd,700);else t(go,700)};cd()}};t(tick,1000);
+const go=()=>{$('#hd').textContent='';$('#cd').innerHTML=cards(1);Q({q:"What's missing?",ch:distract(m),a:m,s:`It's ${art(m)}!`,rev:()=>$('#cd').innerHTML=cards(0)},next)}}
+// LEVEL 2
+function L2(i,next){const ws=pick(V,6),P=[[15,28],[45,28],[78,28],[15,72],[45,72],[78,72]],ty=sh(['count','remove','swap']),ks=pick([0,1,2,3,4,5],3),d={};ks.forEach((k,j)=>d[k]={t:ty[j],nw:pick(V.filter(w=>!ws.includes(w)),1)[0]});
+const found=new Set();let busy=0;
+const sc=side=>`<div><div class="lab">Picture ${side}</div><div class="room">${ws.map((w,k)=>{let x=em(w),df=d[k];if(side=='A'&&df&&df.t=='count')x+=x;if(side=='B'&&df){if(df.t=='remove')x='';if(df.t=='swap')x=em(df.nw)}return`<div class="slot" data-k="${k}" style="left:${P[k][0]+(side=='B'?0:0)}%;top:${P[k][1]}%">${x}</div>`}).join('')}</div></div>`;
+$('#stage').innerHTML=`<h2>🔍 Find 3 differences! <span id="fc">0/3</span></h2><div class="pair">${sc('A')}${sc('B')}</div>`;
+document.querySelectorAll('.slot').forEach(s=>s.onclick=()=>{const k=+s.dataset.k;if(busy||found.has(k))return;if(!d[k]){s.classList.add('wig');setTimeout(()=>s.classList.remove('wig'),400);sfx(0);return}
+busy=1;found.add(k);document.querySelectorAll(`.slot[data-k="${k}"]`).forEach(x=>x.classList.add('found'));$('#fc').textContent=found.size+'/3';sfx(1);conf(20);const df=d[k],sw=df.t=='swap',a=sw?df.nw:ws[k];
+$('#qbox').innerHTML='<h2>🎉 FOUND IT!</h2>';setTimeout(()=>Q({q:sw?'What is that?':"What's missing?",ch:distract(a),a,s:`It's ${art(a)}!`},()=>{busy=0;if(found.size>=3)next();else $('#qbox').innerHTML='<h2>👀 Find more!</h2>'}),900)})}
+// LEVEL 3
+function L3(i,next){const w=pick(V,1)[0],yn=i==2,g=yn?pick([w,pick(V.filter(x=>x!==w),1)[0]],1)[0]:w;
+$('#stage').innerHTML=`<h2>🎁 Tap the mystery box!</h2><div id="bx" class="box">📦</div>`;
+$('#bx').onclick=function(){if(this.dataset.o)return;this.dataset.o=1;this.className='box open';sfx(1);setTimeout(()=>{$('#stage').innerHTML=`<h2>🎁 Look!</h2><div class="sil" id="sl">${em(w)}</div>`;
+Q(yn?{q:`Is it ${art(g)}?`,ch:['Yes, it is.',"No, it isn't."],a:g===w?'Yes, it is.':"No, it isn't.",s:g===w?'Yes, it is.':`No, it isn't. It's ${art(w)}.`,rev:()=>$('#sl').className='sil rev'}:{q:'What is it?',ch:distract(w),a:w,s:`YES! It's ${art(w)}!`.replace('YES! ','Yes! '),rev:()=>$('#sl').className='sil rev'},next)},700)}}
+// LEVEL 4
+function L4(i,next){const o=pick(V.filter(w=>w!=='backpack'),3),pl=sh(['on the desk','in the backpack','under the chair']),p={};pl.forEach((x,j)=>p[x]=o[j]);const t=pl.indexOf(pl.find(x=>p[x]===o[0]))>=0?o[0]:o[0],wh=pl.find(x=>p[x]===t);
+$('#stage').innerHTML=`<div class="scene4"><div class="z"><span class="it">${em(p['on the desk'])}</span><span class="fur">${'🗃️'}</span>desk</div><div class="z"><span class="fur">${em('backpack')}</span><span class="in">${em(p['in the backpack'])}</span>backpack</div><div class="z"><span class="fur">${'🪑'}</span><span class="it">${em(p['under the chair'])}</span>chair</div></div>`;
+Q({q:`Where is the ${t}?`,ch:['A. on the desk','B. in the backpack','C. under the chair'],a:'ABC'['on the desk,in the backpack,under the chair'.split(',').indexOf(wh)]+'. '+wh,s:`The ${t} is ${wh}.`,rev:()=>0},next)}
+// LEVEL 5
+function L5(i,next){const K=[['👧','Mia'],['👦','Ben'],['👩','Lily']],w=pick(V,1)[0],th=pick(K,1)[0];
+$('#stage').innerHTML=`<h2>😱 The ${w} is missing!</h2><div class="kids">${K.map(k=>`<div class="kid"><span class="pk">${k===th?em(w):''}</span><span class="face">${k[0]}</span>${k[1]}</div>`).join('')}</div><p class="lab">🔎 Look carefully!</p>`;
+Q({q:`Who took the ${w}?`,ch:K.map(k=>k[1]),a:th[1],s:`${th[1]} has the ${w}!`,rev:()=>{$('#stage').querySelector('p').textContent='🎉 CASE CLOSED!'}},next)}
+// TEACHER
+function teach(){const T=[['Level 1 — What\'s missing?','pen, pencil, crayon, eraser, ruler, sharpener, backpack, book, notebook','What\'s missing? / It\'s a ruler.','Teacher: "What\'s missing?" → Student: "The ruler!" → Teacher: "What is it?" → "It\'s a ruler."'],['Level 2 — Spot the Difference','All 9 words','What is that? / What\'s missing? / It\'s a pencil.','Ask: "What\'s different?" "What\'s missing in Picture B?" Count the books: "One book, two books."'],['Level 3 — Mystery Box','All 9 words','What is it? It\'s a pencil. / Is it a ruler? Yes, it is. / No, it isn\'t.','Ask "Is it a ruler?" before choosing. Let students guess aloud, then pick.'],['Level 4 — Where is it?','desk, chair, backpack + 9 school things','Where is the pencil? It\'s on the desk.','Point: "Where is the pen?" Swap roles: student asks, teacher answers.'],['Level 5 — Who took it?','pen, pencil, crayon, eraser, ruler, sharpener, book, notebook','Who took the ruler? Ben has the ruler!','Ask: "Who has the book?" Student repeats "Mia has the book."'],['Final — Catch the Thief!','All vocabulary','Review of all sentences','Pairs: one asks "What is this?", one answers "It\'s a ___." Suggested pacing: Home 5m, L1 10m, L2 10m, L3 8m, L4 10m, L5 8m, Final 9m.']];
+const A=['What is this?','What is that?',"It's a pencil.","It's a book.",'Is it a ruler?','Yes, it is.',"No, it isn't.","What's missing?",'Where is the pencil?',"It's on the desk.",'Who took the ruler?','Correct!','Try again!','Amazing!','Case closed!'];
+const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox"><button onclick="this.closest('.modal').remove()">✖ Close</button><h2>👩‍🏫 Teacher Mode</h2>${T.map(t=>`<h3>${t[0]}</h3><p><b>Vocabulary:</b> ${t[1]}</p><p><b>Target:</b> ${t[2]}</p><p><b>Teacher question / follow-up:</b> ${t[3]}</p>`).join('')}<h3>🔊 Audio</h3>${A.map(a=>`<button class="snd" data-s="${a}">🔊 ${a}</button> `).join('')}</div>`;document.body.appendChild(m)}
+home();
+</script></body></html>
